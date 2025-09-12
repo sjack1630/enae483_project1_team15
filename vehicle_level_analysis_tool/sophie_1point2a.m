@@ -1,6 +1,5 @@
 % solids row
 % combo: first prop: LOX/LH2, second prop: solid
-addpath('..')
 
 delta1 = 0.08;
 delta2 = 0.08;
@@ -36,4 +35,5 @@ ylim([-100, 1e4])
 legend("First Stage Mass", "Second Stage Mass", "Gross Vehicle Mass")
 xlabel("First Stage \DeltaV Fraction")
 ylabel("Mass (t)")
+title("First Stage: LOX/LH2, Second Stage: Solid")
 
