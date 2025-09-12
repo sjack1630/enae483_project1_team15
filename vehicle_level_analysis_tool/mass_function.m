@@ -1,7 +1,7 @@
-function [m_1, m_2, m_pr1, m_pr2] = mass_function(Isp1, Isp2, X, delta1, delta2)
-    deltaV_tot = 12.3;
-    g0 = 9.81;
-    m_pl = 26000;
+function [m_in1, m_in2, m_pr1, m_pr2] = mass_function(Isp1, Isp2, X, delta1, delta2)
+    deltaV_tot = 12300; % m/s
+    g0 = 9.81; % m/s^2
+    m_pl = 26000; % kg
 
     deltaV1 = X*deltaV_tot;
     deltaV2 = (1-X)*deltaV_tot;
