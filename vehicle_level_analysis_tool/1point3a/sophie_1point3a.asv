@@ -1,5 +1,6 @@
 % solids row
 % combo: first prop: LOX/LH2, second prop: solid
+addpath('..')
 
 delta1 = 0.08;
 delta2 = 0.08;
@@ -10,7 +11,7 @@ X = 0:0.001:1;
 cost_stage1_arr = [];
 cost_stage2_arr = [];
 
-for i = 1:length(X)
+for i = 1:length(X)- 
     [stageCost_nr1, stageCost_nr2] = cost_function(Isp1, Isp2, X(i), delta1, delta2);
     cost_stage1_arr(end+1) = stageCost_nr1;
     cost_stage2_arr(end+1) = stageCost_nr2;
@@ -18,11 +19,11 @@ end
 
 total_cost = cost_stage1_arr + cost_stage2_arr;
 
-min_m0 = realmax;
-for i = 1:length(m0)
-    if m_stage1_arr(i) > 0 && m_stage2_arr(i) > 0 && m0_arr(i) < min_m0
-        min_m0 = m0_arr(i);
-        min_m0_X = X(i);
+min_cost = realmax;
+for i = 1:length(total_cost)
+    if ~isnan(total_cost(i)) && total_cost(i) < min_cost
+        min_cost = total_cost(i);
+        min_cost_X = X(i);
     end
 end
 
@@ -30,8 +31,8 @@ plot(X, cost_stage1_arr/1000)
 hold on
 plot(X, cost_stage2_arr/1000)
 plot(X, total_cost/1000)
-% plot(min_m0_X, min_m0/1000, '.', MarkerSize=20)
-% ylim([-100, 1e4])
+plot(min_cost_X, min_cost/1000, '.', MarkerSize=20)
+ylim([0, 500])
 legend("First Stage Cost", "Second Stage Cost", "Combined Launch Vehicle Cost")
 xlabel("First Stage \DeltaV Fraction")
 ylabel("Cost ($B2025)")
