@@ -45,13 +45,16 @@ for isp = 1:length(Isp)
     cost_tot = cost_tot/1000;
     min_gross_cost = min_gross_cost/1000;
 
+    %output - min cost and corresponding deltaV
+    fprintf('Stage 1 Isp = %d s --> Optimum at X = %.3f, Min Gross Cost = %.2f $B2025 \n', Isp(isp), x_min, min_gross_cost);
+
     %plotting
     plot(X, cost_s1);
     hold on;
     plot(X, cost_s2);
     plot(X, cost_tot);
     plot(x_min, min_gross_cost, '.', MarkerSize=20);
-    ylim([0, 500]);
+    ylim([0, 80]);
     title(sprintf('Stage 1 Isp = %d s', Isp(isp)));
     legend("First Stage Cost", "Second Stage Cost", "Gross Vehicle Cost")
     xlabel("Delta V Fraction");
