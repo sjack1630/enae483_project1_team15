@@ -1,4 +1,4 @@
-%Sara C 1.2 Code
+%Sara C 1.2a Code
 
 %Looking at mixture of:
 %Stage 2: LOX/LH2
@@ -51,7 +51,7 @@ for isp = 1:length(Isp)
     plot(X, m_0);
     plot(x_min, min_gross_mass, '.', MarkerSize=20);
     ylim([0, 1e4]);
-    title(Isp(isp));
+    title(sprintf('Stage 1 Isp = %d s', Isp(isp)))
     legend("First Stage Mass", "Second Stage Mass", "Gross Vehicle Mass")
     xlabel("Delta V Fraction");
     ylabel("Mass (metric tons)")
