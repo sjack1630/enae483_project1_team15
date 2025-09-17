@@ -42,7 +42,7 @@ hold on
 plot(X, cost_stage2_arr/1000)
 plot(X, total_cost/1000)
 plot(min_cost_X, min_cost/1000, '.', MarkerSize=20)
-ylim([0, 500])
+ylim([0, 300])
 legend("First Stage Cost", "Second Stage Cost", "Combined Launch Vehicle Cost")
 xlabel("First Stage \DeltaV Fraction")
 ylabel("Cost ($B2025)")
