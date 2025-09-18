@@ -5,7 +5,7 @@ addpath('..')
 % given Constants 
 Delta_1 = 0.08;
 Delta_2 = 0.08;
-Isp_1 = 327;
+Isp_1 = 366;
 Isp_2 = 327;
 m_PL = 26000;
 
@@ -63,5 +63,6 @@ ylim([0,1e4]);
 xlabel('X value');
 ylabel('Mass (Metric Tons)');
 title('Mass of Stages vs. X value');
+subtitle('Stage 1: LOX/LH2, Stage 2: LOX/LCH4')
 legend('Stage 1 Mass', 'Stage 2 Mass', 'Total Mass');
 grid on;
