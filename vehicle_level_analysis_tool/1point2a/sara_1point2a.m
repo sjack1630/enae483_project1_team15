@@ -35,6 +35,7 @@ for isp = 1:length(Isp)
         if m_s1(i) > 0 && m_s2(i) > 0 && m_0(i) < min_gross_mass
             min_gross_mass = m_0(i); %convert to metric tons
             x_min = X(i);
+            
         end
     end
     
@@ -43,6 +44,9 @@ for isp = 1:length(Isp)
     m_s2 = m_s2/1000;
     m_0 = m_0/1000;
     min_gross_mass = min_gross_mass/1000;
+
+    %output - min mass and corresponding deltaV
+    fprintf('Stage 1 Isp = %d s --> Optimum at X = %.3f, Min Gross Mass = %.2f metric tons\n', Isp(isp), x_min, min_gross_mass);
 
     %plotting
     plot(X, m_s1);
