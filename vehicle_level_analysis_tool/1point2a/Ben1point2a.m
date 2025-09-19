@@ -11,8 +11,8 @@ m_PL = 26000;
 
 % the range of x from 0 to 1 at 0.01 intervals and the
 % number of x values we will have
-X = 0:0.01:1;
-X_length = 101;
+X = 0:0.001:1;
+X_length = 1001;
 
 % the arrays
 X_array = zeros(1,X_length);
@@ -63,5 +63,6 @@ ylim([0,1e4]);
 xlabel('X value');
 ylabel('Mass (Metric Tons)');
 title('Mass of Stages vs. X value');
+subtitle('Stage 1: LOX/LH2, Stage 2: LOX/LCH4')
 legend('Stage 1 Mass', 'Stage 2 Mass', 'Total Mass');
 grid on;
