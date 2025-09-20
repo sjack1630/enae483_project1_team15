@@ -39,5 +39,4 @@ function [m_in1, m_in2, m_pr1, m_pr2, m0] = mass_function(Isp1, Isp2, X, delta1,
 
     % Assign total mass as the total mass of stage 1 (m_1 includes m_2)
     m0 = m_1;
-
 end

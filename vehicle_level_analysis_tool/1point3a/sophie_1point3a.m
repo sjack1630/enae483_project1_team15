@@ -42,9 +42,10 @@ hold on
 plot(X, cost_stage2_arr/1000)
 plot(X, total_cost/1000)
 plot(min_cost_X, min_cost/1000, '.', MarkerSize=20)
-ylim([0, 300])
-legend("First Stage Cost", "Second Stage Cost", "Combined Launch Vehicle Cost")
+grid on
+ylim([0, 50])
+legend("First Stage Cost", "Second Stage Cost", "Combined Launch Vehicle Cost", "Minimum Cost")
 xlabel("First Stage \DeltaV Fraction")
 ylabel("Cost ($B2025)")
-title("First Stage: LOX/LH2, Second Stage: Solid")
+title("Cost vs /DeltaV Fraction for First Stage: LOX/LH2, Second Stage: Solids")
 
