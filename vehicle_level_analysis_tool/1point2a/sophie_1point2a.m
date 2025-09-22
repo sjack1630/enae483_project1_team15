@@ -42,7 +42,9 @@ plot(X, m_stage2_arr/1000)
 plot(X, m0_arr/1000)
 plot(min_m0_X, min_m0/1000, '.', MarkerSize=20)
 ylim([0, 1e4])
-legend("First Stage Mass", "Second Stage Mass", "Gross Vehicle Mass")
+grid on
+legend("First Stage Mass", "Second Stage Mass", "Gross Vehicle Mass", "Minimum Gross Mass")
 xlabel("First Stage \DeltaV Fraction")
 ylabel("Mass (t)")
+title("Mass vs \DeltaV Fraction for First Stage: LOX/LH2, Second Stage: Solids")
 
