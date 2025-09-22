@@ -61,5 +61,4 @@ for isp = 1:length(Isp)
     ylabel("Cost ($B2025)")
     hold off;
     
-    pause;
 end

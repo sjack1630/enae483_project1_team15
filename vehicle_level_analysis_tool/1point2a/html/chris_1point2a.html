@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>chris_1point2a</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2025-09-22">
+<meta name="DC.source" content="chris_1point2a.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<pre class="codeinput">
+<span class="comment">% TP 1</span>
+<span class="comment">% Chris Witherspoon</span>
+<span class="comment">% 1.2</span>
+
+addpath(<span class="string">'..'</span>)
+
+<span class="comment">% Delta constants</span>
+d1 = 0.08 ;
+d2 = 0.08 ;
+
+<span class="comment">% Specific impulse (storables)</span>
+isp = 285 ;
+isp_comp = 285 ; <span class="comment">% Second</span>
+
+<span class="comment">% Payload mass</span>
+mpl = 26000 ;
+
+<span class="comment">% X variable array</span>
+x = 0:0.001:1 ;
+
+<span class="comment">% Stage arrays initializations</span>
+first_stage = [] ;
+second_stage = [] ;
+tot_mass = [] ;
+
+<span class="comment">% Array population</span>
+i = 1 ; <span class="comment">% initialize the variable to loop</span>
+<span class="keyword">while</span> i &lt;= length(x)
+    [min1, min2, mpr1, mpr2, m0] = mass_function(isp, isp_comp, x(i), d1, d2);
+    first_stage(end+1) = min1 + mpr1 ;
+    second_stage(end+1) = min2 + mpr2 ;
+    tot_mass(end+1) = m0 ;
+    i = i + 1 ;
+<span class="keyword">end</span>
+
+<span class="comment">% Value placeholder for the mass</span>
+min_m0 = realmax ;
+min_mox = NaN ;
+<span class="comment">% Check the min value</span>
+i = 1 ; <span class="comment">%</span>
+<span class="keyword">while</span>  i &lt;= length(x)
+    <span class="keyword">if</span> first_stage(i) &gt; 0 &amp;&amp; second_stage(i) &gt; 0 &amp;&amp; tot_mass(i) &lt; min_m0
+        min_m0 = tot_mass(i) ;
+        min_mox = x(i) ;
+    <span class="keyword">end</span>
+    i = i + 1 ;
+<span class="keyword">end</span>
+
+<span class="comment">% Plotting the graph</span>
+plot(x,first_stage/1000) ;
+hold <span class="string">on</span> ;
+grid <span class="string">on</span> ;
+title(<span class="string">"Storables then LOX/LCH4"</span>)
+plot(x, second_stage/1000) ;
+plot(x, tot_mass/1000) ;
+plot(min_mox, min_m0/1000, <span class="string">'.'</span>, MarkerSize = 20) ;
+legend(<span class="string">'Stage 1 Mass'</span>,<span class="string">'Stage 2 Mass'</span>,<span class="string">'Total Mass'</span>,<span class="string">'Minimum Mass'</span>,<span class="string">'Location'</span>,<span class="string">'best'</span>);
+ylim([0, 1e4]) ;
+xlabel(<span class="string">"First Stage"</span>) ;
+ylabel(<span class="string">"Mass"</span>) ;
+</pre>
+<img vspace="5" hspace="5" src="chris_1point2a_01.png" alt=""> <p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+% TP 1
+% Chris Witherspoon
+% 1.2
+
+addpath('..')
+
+% Delta constants
+d1 = 0.08 ;
+d2 = 0.08 ;
+
+% Specific impulse (storables)
+isp = 285 ;
+isp_comp = 285 ; % Second
+
+% Payload mass
+mpl = 26000 ;
+
+% X variable array
+x = 0:0.001:1 ;
+
+% Stage arrays initializations
+first_stage = [] ;
+second_stage = [] ;
+tot_mass = [] ;
+
+% Array population
+i = 1 ; % initialize the variable to loop
+while i <= length(x)
+    [min1, min2, mpr1, mpr2, m0] = mass_function(isp, isp_comp, x(i), d1, d2);
+    first_stage(end+1) = min1 + mpr1 ;
+    second_stage(end+1) = min2 + mpr2 ;
+    tot_mass(end+1) = m0 ;
+    i = i + 1 ;
+end
+
+% Value placeholder for the mass
+min_m0 = realmax ;
+min_mox = NaN ;
+% Check the min value
+i = 1 ; %
+while  i <= length(x)
+    if first_stage(i) > 0 && second_stage(i) > 0 && tot_mass(i) < min_m0 
+        min_m0 = tot_mass(i) ;
+        min_mox = x(i) ;
+    end
+    i = i + 1 ;
+end
+
+% Plotting the graph
+plot(x,first_stage/1000) ;
+hold on ;
+grid on ;
+title("Storables then LOX/LCH4")
+plot(x, second_stage/1000) ;
+plot(x, tot_mass/1000) ;
+plot(min_mox, min_m0/1000, '.', MarkerSize = 20) ;
+legend('Stage 1 Mass','Stage 2 Mass','Total Mass','Minimum Mass','Location','best');
+ylim([0, 1e4]) ;
+xlabel("First Stage") ;
+ylabel("Mass") ;
+##### SOURCE END #####
+-->
+</body>
+</html>

@@ -61,7 +61,6 @@ for isp = 1:length(Isp)
     ylabel("Mass (metric tons)")
     hold off;
     
-    pause;
 end
     
 
