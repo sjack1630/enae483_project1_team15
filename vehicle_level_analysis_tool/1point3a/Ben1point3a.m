@@ -5,14 +5,14 @@ addpath('..')
 % given Constants 
 Delta_1 = 0.08;
 Delta_2 = 0.08;
-Isp_1 = 366;
+Isp_1 = 327;
 Isp_2 = 327;
 m_PL = 26000;
 
 % the range of x from 0 to 1 at 0.01 intervals and the
 % number of x values we will have
-X = 0:0.01:1;
-X_length = 101;
+X = 0:0.001:1;
+X_length = 1001;
 
 % the arrays
 Stage1_cost = zeros(1,X_length);
