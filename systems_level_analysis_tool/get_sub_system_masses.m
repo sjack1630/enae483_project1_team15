@@ -17,7 +17,6 @@
     payload_cone_height = 10; % m
     payload_cyl_height = 10; % m
     engine_space = 3; % m
-    stage2_engine_height = 5; % m
 
     if second_stage == "LCH4"
         stage2_Isp = 327;
@@ -26,7 +25,7 @@
         stage2_fuel_rho = rho_LCH4;
         stage2_thrust = 0.745e3; % N
         stage2_nozzle_exp = 45;
-        chamber_pressure_1 = 10.1e3; % Pa
+        chamber_pressure_2 = 10.1e3; % Pa
     elseif second_stage == "LH2"
         stage2_Isp = 366;
         stage2_ratio = 6.03;
@@ -34,7 +33,7 @@
         stage2_fuel_rho = rho_LH2;
         stage2_thrust = 0.099e3; % N
         stage2_nozzle_exp = 84;
-        chamber_pressure_1 = 4.2e3; % Pa
+        chamber_pressure_2 = 4.2e3; % Pa
     elseif second_stage == "RP1"
         stage2_Isp = 311;
         stage2_ratio = 2.72;
@@ -42,12 +41,12 @@
         stage2_fuel_rho = rho_RP1;
         stage2_thrust = 0.061e3; % N
         stage2_nozzle_exp = 14.5;
-        chamber_pressure_1 = 6.77e3; % Pa
+        chamber_pressure_2 = 6.77e3; % Pa
     elseif second_stage == "solid"
         stage2_Isp = 269;
         stage2_thrust = 2.94e3; % N
         stage2_nozzle_exp = 56;
-        chamber_pressure_1 = 5e3; % Pa
+        chamber_pressure_2 = 5e3; % Pa
     elseif second_stage == "storables"
         stage2_Isp = 285;
         stage2_ratio = 2.67;
@@ -55,11 +54,11 @@
         stage2_fuel_rho = rho_UDMH;
         stage2_thrust = 0.067e3; % N
         stage2_nozzle_exp = 81.3;
-        chamber_pressure_1 = 14.7e3; % Pa
+        chamber_pressure_2 = 14.7e3; % Pa
     end
 
-    deltaV1_frac = deltaV*X;
-    r = exp(-deltaV1_frac/(g0*stage2_Isp));
+    deltaV2_frac = deltaV*X;
+    r = exp(-deltaV2_frac/(g0*stage2_Isp));
     lambda = r - delta;
     M_0 = M_l/lambda; % kg
     M_i = delta*M_0; % kg
@@ -125,28 +124,28 @@
     aft2_fairing_area = 2*pi*radius*(engine_space + cap_height);
 
     payload_fairing_mass = 4.95*payload_fairing_area^(1.15);
-    stage2_aft2_fairing_mass = 4.95*aft2_fairing_area^(1.15);
+    stage2_aft_fairing_mass = 4.95*aft2_fairing_area^(1.15);
 
     if second_stage ~= "solid"    
         intertank2_fairing_area = 2*pi*radius*(2*cap_height);
         stage2_intertank2_fairing_mass = 4.95*intertank2_fairing_area^(1.15);
-        stage1_height = payload_cone_height + payload_cyl_height + 4*cap_height + ox_cyl_height + fuel_cyl_height + engine_space;
+        stage2_height = payload_cone_height + payload_cyl_height + 4*cap_height + ox_cyl_height + fuel_cyl_height + engine_space;
     else 
         stage2_intertank2_fairing_mass = 0;
-        stage1_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
+        stage2_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
     end
 
     
 
-    stage2_mass_wiring = 1.058*sqrt(M_0)*stage1_height^(0.25);
+    stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
 
     stage2_mass_thrust_struct = 2.25e-4*stage2_thrust;
 
-    stage2_mass_gimbals = 237.8*(stage2_thrust/chamber_pressure_1)^(0.9375);
+    stage2_mass_gimbals = 237.8*(stage2_thrust/chamber_pressure_2)^(0.9375);
 
     stage2_mass_avionics = 10*M_0^(0.361);
 
-    stage2_total_mass = M_p + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + stage2_mass_avionics + stage2_mass_wiring + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft2_fairing_mass;
+    stage2_total_mass = M_p + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + stage2_mass_avionics + stage2_mass_wiring + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass;
 
 
     
@@ -252,7 +251,7 @@
         stage1_casing_mass = 0.135*M_p;
     end
 
-    interstage_fairing_area = 2*pi*radius*(stage2_engine_height + cap_height);
+    interstage_fairing_area = 2*pi*radius*(engine_space + cap_height);
     aft2_fairing_area = 2*pi*radius*(engine_space + cap_height);
 
     interstage_fairing_mass = 4.95*interstage_fairing_area^(1.15);
@@ -280,6 +279,7 @@
     stage1_total_mass = M_p + stage1_tank_mass + stage1_insulation_mass + stage1_engine_mass + stage1_mass_thrust_struct + stage1_casing_mass + stage1_mass_gimbals + stage1_mass_avionics + stage1_mass_wiring + interstage_fairing_mass + stage1_intertank2_fairing_mass + stage1_aft2_fairing_mass;
 
     total_mass = stage1_total_mass + stage2_total_mass
+    total_height = stage1_height + stage2_height
 
 % end
 
