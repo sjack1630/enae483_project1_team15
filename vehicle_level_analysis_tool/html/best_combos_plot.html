@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>best_combos_plot</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2025-09-22">
+<meta name="DC.source" content="best_combos_plot.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<pre class="codeinput">solid = readmatrix(<span class="string">'solid.csv'</span>, <span class="string">'ThousandsSeparator'</span>, <span class="string">','</span>);
+RP1 = readmatrix(<span class="string">'RP1.csv'</span>, <span class="string">'ThousandsSeparator'</span>, <span class="string">','</span>);
+LCH4 = readmatrix(<span class="string">'LCH4.csv'</span>, <span class="string">'ThousandsSeparator'</span>, <span class="string">','</span>);
+LH2 = readmatrix(<span class="string">'LH2.csv'</span>, <span class="string">'ThousandsSeparator'</span>, <span class="string">','</span>);
+storable = readmatrix(<span class="string">'storable.csv'</span>, <span class="string">'ThousandsSeparator'</span>, <span class="string">','</span>);
+
+LH2_min_mass_MASS_solid  = solid(1,2);
+LH2_min_mass_COST_solid  = solid(2,2);
+LH2_min_cost_COST_solid  = solid(3,2);
+LH2_min_cost_MASS_solid  = solid(4,2);
+
+LH2_min_mass_MASS_RP1 = RP1(1,2);
+LH2_min_mass_COST_RP1 = RP1(2,2);
+LH2_min_cost_COST_RP1 = RP1(3,2);
+LH2_min_cost_MASS_RP1 = RP1(4,2);
+
+LH2_min_mass_MASS_LCH4 = LCH4(1,2);
+LH2_min_mass_COST_LCH4 = LCH4(2,2);
+LH2_min_cost_COST_LCH4 = LCH4(3,2);
+LH2_min_cost_MASS_LCH4 = LCH4(4,2);
+
+LH2_min_mass_MASS_LH2 = LH2(1,2);
+LH2_min_mass_COST_LH2 = LH2(2,2);
+LH2_min_cost_COST_LH2 = LH2(3,2);
+LH2_min_cost_MASS_LH2 = LH2(4,2);
+
+LH2_min_mass_MASS_storable = storable(1,2);
+LH2_min_mass_COST_storable = storable(2,2);
+LH2_min_cost_COST_storable = storable(3,2);
+LH2_min_cost_MASS_storable = storable(4,2);
+
+figure;
+plot(LH2_min_mass_MASS_solid, LH2_min_mass_COST_solid, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, <span class="string">'r'</span>)
+hold <span class="string">on</span>
+plot(LH2_min_cost_MASS_solid, LH2_min_cost_COST_solid, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, <span class="string">'r'</span>)
+
+plot(LH2_min_mass_MASS_RP1, LH2_min_mass_COST_RP1, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0 52 0]/255)
+plot(LH2_min_cost_MASS_RP1, LH2_min_cost_COST_RP1, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [0 52 0]/255)
+
+plot(LH2_min_mass_MASS_LCH4, LH2_min_mass_COST_LCH4, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, <span class="string">'b'</span>)
+plot(LH2_min_cost_MASS_LCH4, LH2_min_cost_COST_LCH4, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, <span class="string">'b'</span>)
+
+plot(LH2_min_mass_MASS_LH2, LH2_min_mass_COST_LH2, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [204 0 204]/255)
+plot(LH2_min_cost_MASS_LH2, LH2_min_cost_COST_LH2, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [204 0 204]/255)
+
+plot(LH2_min_mass_MASS_storable, LH2_min_mass_COST_storable, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [255 153 51]/255)
+plot(LH2_min_cost_MASS_storable, LH2_min_cost_COST_storable, <span class="string">'*'</span>, <span class="string">'MarkerSize'</span>, 15, <span class="string">'LineWidth'</span>, 2, <span class="string">'Color'</span>, [255 153 51]/255)
+
+red = plot(nan, nan, <span class="string">'o'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'r'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'r'</span>, <span class="string">'MarkerSize'</span>, 10);
+blue = plot(nan, nan, <span class="string">'o'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'b'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'b'</span>, <span class="string">'MarkerSize'</span>, 10);
+green = plot(nan, nan, <span class="string">'o'</span>, <span class="string">'MarkerFaceColor'</span>, [0 52 0]/255, <span class="string">'MarkerEdgeColor'</span>, [0 52 0]/255, <span class="string">'MarkerSize'</span>, 10);
+orange = plot(nan, nan, <span class="string">'o'</span>, <span class="string">'MarkerFaceColor'</span>, [255 153 51]/255, <span class="string">'MarkerEdgeColor'</span>, [255 153 51]/255, <span class="string">'MarkerSize'</span>, 10);
+purple = plot(nan, nan, <span class="string">'o'</span>, <span class="string">'MarkerFaceColor'</span>, [204 0 204]/255, <span class="string">'MarkerEdgeColor'</span>, [204 0 204]/255, <span class="string">'MarkerSize'</span>, 10);
+
+circle = plot(nan, nan, <span class="string">'o'</span>, <span class="string">'Color'</span>, <span class="string">'k'</span>, <span class="string">'MarkerSize'</span>, 10);
+star = plot(nan, nan, <span class="string">'*'</span>, <span class="string">'Color'</span>, <span class="string">'k'</span>, <span class="string">'MarkerSize'</span>, 10);
+x = plot(nan, nan, <span class="string">'x'</span>, <span class="string">'Color'</span>, <span class="string">'k'</span>, <span class="string">'MarkerSize'</span>, 10);
+diamond = plot(nan, nan, <span class="string">'diamond'</span>, <span class="string">'Color'</span>, <span class="string">'k'</span>, <span class="string">'MarkerSize'</span>, 10);
+triangle = plot(nan, nan, <span class="string">'^'</span>, <span class="string">'Color'</span>, <span class="string">'k'</span>, <span class="string">'MarkerSize'</span>, 10);
+
+legend([circle, star, x, diamond, triangle, blue, purple, green, red, orange], <span class="string">'First Stage: LOX/LCH4'</span>, <span class="string">'First Stage: LOX/LH2'</span>, <span class="string">'First Stage: LOX/RP1'</span>, <span class="string">'First Stage: Solid'</span>, <span class="string">'First Stage: Storables'</span>, <span class="string">'Second Stage: LOX/LCH4'</span>, <span class="string">'Second Stage: LOX/LH2'</span>, <span class="string">'Second Stage: LOX/RP1'</span>, <span class="string">'Second Stage: Solid'</span>, <span class="string">'Second Stage: Storables'</span>)
+
+xlabel(<span class="string">'Mass (t)'</span>)
+ylabel(<span class="string">'Cost ($B2025)'</span>)
+title(<span class="string">'Minimum Cost and Minimum Mass Propellant Mix Designs'</span>)
+grid <span class="string">on</span>
+</pre>
+<pre class="codeoutput error">Error using readmatrix (line 171)
+Unable to find or open 'solid.csv'. Check the path and filename or file permissions.
+
+Error in best_combos_plot (line 1)
+solid = readmatrix('solid.csv', 'ThousandsSeparator', ',');
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+solid = readmatrix('solid.csv', 'ThousandsSeparator', ',');
+RP1 = readmatrix('RP1.csv', 'ThousandsSeparator', ',');
+LCH4 = readmatrix('LCH4.csv', 'ThousandsSeparator', ',');
+LH2 = readmatrix('LH2.csv', 'ThousandsSeparator', ',');
+storable = readmatrix('storable.csv', 'ThousandsSeparator', ',');
+
+LH2_min_mass_MASS_solid  = solid(1,2);
+LH2_min_mass_COST_solid  = solid(2,2);
+LH2_min_cost_COST_solid  = solid(3,2);
+LH2_min_cost_MASS_solid  = solid(4,2);
+
+LH2_min_mass_MASS_RP1 = RP1(1,2);
+LH2_min_mass_COST_RP1 = RP1(2,2);
+LH2_min_cost_COST_RP1 = RP1(3,2);
+LH2_min_cost_MASS_RP1 = RP1(4,2);
+
+LH2_min_mass_MASS_LCH4 = LCH4(1,2);
+LH2_min_mass_COST_LCH4 = LCH4(2,2);
+LH2_min_cost_COST_LCH4 = LCH4(3,2);
+LH2_min_cost_MASS_LCH4 = LCH4(4,2);
+
+LH2_min_mass_MASS_LH2 = LH2(1,2);
+LH2_min_mass_COST_LH2 = LH2(2,2);
+LH2_min_cost_COST_LH2 = LH2(3,2);
+LH2_min_cost_MASS_LH2 = LH2(4,2);
+
+LH2_min_mass_MASS_storable = storable(1,2);
+LH2_min_mass_COST_storable = storable(2,2);
+LH2_min_cost_COST_storable = storable(3,2);
+LH2_min_cost_MASS_storable = storable(4,2);
+
+figure;
+plot(LH2_min_mass_MASS_solid, LH2_min_mass_COST_solid, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', 'r')
+hold on
+plot(LH2_min_cost_MASS_solid, LH2_min_cost_COST_solid, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', 'r')
+
+plot(LH2_min_mass_MASS_RP1, LH2_min_mass_COST_RP1, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', [0 52 0]/255)
+plot(LH2_min_cost_MASS_RP1, LH2_min_cost_COST_RP1, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', [0 52 0]/255)
+
+plot(LH2_min_mass_MASS_LCH4, LH2_min_mass_COST_LCH4, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', 'b')
+plot(LH2_min_cost_MASS_LCH4, LH2_min_cost_COST_LCH4, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', 'b')
+
+plot(LH2_min_mass_MASS_LH2, LH2_min_mass_COST_LH2, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', [204 0 204]/255)
+plot(LH2_min_cost_MASS_LH2, LH2_min_cost_COST_LH2, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', [204 0 204]/255)
+
+plot(LH2_min_mass_MASS_storable, LH2_min_mass_COST_storable, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', [255 153 51]/255)
+plot(LH2_min_cost_MASS_storable, LH2_min_cost_COST_storable, '*', 'MarkerSize', 15, 'LineWidth', 2, 'Color', [255 153 51]/255)
+
+red = plot(nan, nan, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r', 'MarkerSize', 10);
+blue = plot(nan, nan, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b', 'MarkerSize', 10);
+green = plot(nan, nan, 'o', 'MarkerFaceColor', [0 52 0]/255, 'MarkerEdgeColor', [0 52 0]/255, 'MarkerSize', 10);
+orange = plot(nan, nan, 'o', 'MarkerFaceColor', [255 153 51]/255, 'MarkerEdgeColor', [255 153 51]/255, 'MarkerSize', 10);
+purple = plot(nan, nan, 'o', 'MarkerFaceColor', [204 0 204]/255, 'MarkerEdgeColor', [204 0 204]/255, 'MarkerSize', 10);
+
+circle = plot(nan, nan, 'o', 'Color', 'k', 'MarkerSize', 10);
+star = plot(nan, nan, '*', 'Color', 'k', 'MarkerSize', 10);
+x = plot(nan, nan, 'x', 'Color', 'k', 'MarkerSize', 10);
+diamond = plot(nan, nan, 'diamond', 'Color', 'k', 'MarkerSize', 10);
+triangle = plot(nan, nan, '^', 'Color', 'k', 'MarkerSize', 10); 
+
+legend([circle, star, x, diamond, triangle, blue, purple, green, red, orange], 'First Stage: LOX/LCH4', 'First Stage: LOX/LH2', 'First Stage: LOX/RP1', 'First Stage: Solid', 'First Stage: Storables', 'Second Stage: LOX/LCH4', 'Second Stage: LOX/LH2', 'Second Stage: LOX/RP1', 'Second Stage: Solid', 'Second Stage: Storables')
+
+xlabel('Mass (t)')
+ylabel('Cost ($B2025)')
+title('Minimum Cost and Minimum Mass Propellant Mix Designs')
+grid on
+
+##### SOURCE END #####
+-->
+</body>
+</html>

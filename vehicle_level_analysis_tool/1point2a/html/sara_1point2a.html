@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>sara_1point2a</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2025-09-22">
+<meta name="DC.source" content="sara_1point2a.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<pre class="codeinput">
+<span class="comment">%Sara C 1.2a Code</span>
+
+<span class="comment">%Looking at mixture of:</span>
+<span class="comment">%Stage 2: LOX/LH2</span>
+<span class="comment">%Varied Stage 1: LOX/LCH4, LOX/LH2, LOX/RP1, Solid, Storables</span>
+
+<span class="comment">%Variables &amp; Given Parameters</span>
+delta1 = 0.08;
+delta2 = 0.08;
+payload = 26000; <span class="comment">%kg</span>
+<span class="comment">%Specific Impulse</span>
+Isp_s2 = 366; <span class="comment">%stage 2</span>
+<span class="comment">%LCH4, LH2, RP1, solids, storables</span>
+Isp = [327, 366, 311, 269, 285]; <span class="comment">%stage 1 varies</span>
+
+
+<span class="comment">%initialize X (this is delta_V ratio/fraction)</span>
+X=0:0.001:1;
+
+<span class="keyword">for</span> isp = 1:length(Isp)
+    <span class="comment">%mass arrays</span>
+    m_s1 = [];
+    m_s2 = [];
+    m_0 = [];
+    min_gross_mass = realmax;
+
+    <span class="keyword">for</span> i = 1:length(X)
+        <span class="comment">%calling mass function to populate mass arrays</span>
+        [m_in1, m_in2, m_pr1, m_pr2, m0] = mass_function(Isp(isp), Isp_s2, X(i), delta1, delta2);
+        m_s1 = [m_s1 (m_pr1 + m_in1)];
+        m_s2 = [m_s2 (m_pr2 + m_in2)];
+        m_0 = [m_0 m0];
+
+        <span class="comment">%min gross mass function - returns the x,y minimum of the m_0 array</span>
+        <span class="keyword">if</span> m_s1(i) &gt; 0 &amp;&amp; m_s2(i) &gt; 0 &amp;&amp; m_0(i) &lt; min_gross_mass
+            min_gross_mass = m_0(i); <span class="comment">%convert to metric tons</span>
+            x_min = X(i);
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">%kg to metric tons</span>
+    m_s1 = m_s1/1000;
+    m_s2 = m_s2/1000;
+    m_0 = m_0/1000;
+    min_gross_mass = min_gross_mass/1000;
+
+    <span class="comment">%output - min mass and corresponding deltaV</span>
+    fprintf(<span class="string">'Stage 1 Isp = %d s --&gt; Optimum at X = %.3f, Min Gross Mass = %.2f metric tons\n'</span>, Isp(isp), x_min, min_gross_mass);
+
+    <span class="comment">%plotting</span>
+    plot(X, m_s1);
+    hold <span class="string">on</span>;
+    plot(X, m_s2);
+    plot(X, m_0);
+    plot(x_min, min_gross_mass, <span class="string">'.'</span>, MarkerSize=20);
+    ylim([0, 1e4]);
+    title(sprintf(<span class="string">'Stage 1 Isp = %d s'</span>, Isp(isp)))
+    legend(<span class="string">"First Stage Mass"</span>, <span class="string">"Second Stage Mass"</span>, <span class="string">"Gross Vehicle Mass"</span>)
+    xlabel(<span class="string">"Delta V Fraction"</span>);
+    ylabel(<span class="string">"Mass (metric tons)"</span>)
+    hold <span class="string">off</span>;
+
+<span class="keyword">end</span>
+</pre>
+<pre class="codeoutput">Stage 1 Isp = 327 s --&gt; Optimum at X = 0.456, Min Gross Mass = 3680.72 metric tons
+Stage 1 Isp = 366 s --&gt; Optimum at X = 0.500, Min Gross Mass = 2582.05 metric tons
+Stage 1 Isp = 311 s --&gt; Optimum at X = 0.438, Min Gross Mass = 4337.65 metric tons
+Stage 1 Isp = 269 s --&gt; Optimum at X = 0.395, Min Gross Mass = 7209.12 metric tons
+Stage 1 Isp = 285 s --&gt; Optimum at X = 0.411, Min Gross Mass = 5848.23 metric tons
+</pre>
+<img vspace="5" hspace="5" src="sara_1point2a_01.png" alt=""> <p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%Sara C 1.2a Code
+
+%Looking at mixture of:
+%Stage 2: LOX/LH2
+%Varied Stage 1: LOX/LCH4, LOX/LH2, LOX/RP1, Solid, Storables
+
+%Variables & Given Parameters
+delta1 = 0.08;
+delta2 = 0.08;
+payload = 26000; %kg
+%Specific Impulse
+Isp_s2 = 366; %stage 2 
+%LCH4, LH2, RP1, solids, storables
+Isp = [327, 366, 311, 269, 285]; %stage 1 varies
+
+
+%initialize X (this is delta_V ratio/fraction)
+X=0:0.001:1;
+
+for isp = 1:length(Isp)
+    %mass arrays
+    m_s1 = [];
+    m_s2 = [];
+    m_0 = [];
+    min_gross_mass = realmax;
+
+    for i = 1:length(X)
+        %calling mass function to populate mass arrays
+        [m_in1, m_in2, m_pr1, m_pr2, m0] = mass_function(Isp(isp), Isp_s2, X(i), delta1, delta2);
+        m_s1 = [m_s1 (m_pr1 + m_in1)];
+        m_s2 = [m_s2 (m_pr2 + m_in2)];
+        m_0 = [m_0 m0];
+
+        %min gross mass function - returns the x,y minimum of the m_0 array
+        if m_s1(i) > 0 && m_s2(i) > 0 && m_0(i) < min_gross_mass
+            min_gross_mass = m_0(i); %convert to metric tons
+            x_min = X(i);
+            
+        end
+    end
+    
+    %kg to metric tons
+    m_s1 = m_s1/1000; 
+    m_s2 = m_s2/1000;
+    m_0 = m_0/1000;
+    min_gross_mass = min_gross_mass/1000;
+
+    %output - min mass and corresponding deltaV
+    fprintf('Stage 1 Isp = %d s REPLACE_WITH_DASH_DASH> Optimum at X = %.3f, Min Gross Mass = %.2f metric tons\n', Isp(isp), x_min, min_gross_mass);
+
+    %plotting
+    plot(X, m_s1);
+    hold on;
+    plot(X, m_s2);
+    plot(X, m_0);
+    plot(x_min, min_gross_mass, '.', MarkerSize=20);
+    ylim([0, 1e4]);
+    title(sprintf('Stage 1 Isp = %d s', Isp(isp)))
+    legend("First Stage Mass", "Second Stage Mass", "Gross Vehicle Mass")
+    xlabel("Delta V Fraction");
+    ylabel("Mass (metric tons)")
+    hold off;
+    
+end
+    
+
+
+
+##### SOURCE END #####
+-->
+</body>
+</html>
