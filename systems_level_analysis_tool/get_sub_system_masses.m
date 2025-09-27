@@ -1,4 +1,4 @@
-% function [outputArg1,outputArg2] = get_sub_system_masses(first_stage, second_stage, X)
+function [stage1_total_mass, stage2_total_mass, total_height] = get_sub_system_mass(first_stage, second_stage, X, stage1_num_engines, stage2_num_engines))
 
     rho_LH2 = 71;
     rho_LOX = 1140;
@@ -57,7 +57,7 @@
         chamber_pressure_2 = 14.7e3; % Pa
     end
 
-    deltaV2_frac = deltaV*X;
+    deltaV2_frac = deltaV*(1-X);
     r = exp(-deltaV2_frac/(g0*stage2_Isp));
     lambda = r - delta;
     M_0 = M_l/lambda; % kg
@@ -188,7 +188,7 @@
         chamber_pressure_1 = 15.7e3; % Pa
     end
 
-    deltaV1_frac = deltaV*(1-X);
+    deltaV1_frac = deltaV*X;
     r = exp(-deltaV1_frac/(g0*stage1_Isp));
     lambda = r - delta;
     M_0 = M_l/lambda; % kg
@@ -278,8 +278,16 @@
 
     stage1_total_mass = M_p + stage1_tank_mass + stage1_insulation_mass + stage1_engine_mass + stage1_mass_thrust_struct + stage1_casing_mass + stage1_mass_gimbals + stage1_mass_avionics + stage1_mass_wiring + interstage_fairing_mass + stage1_intertank2_fairing_mass + stage1_aft2_fairing_mass;
 
-    total_mass = stage1_total_mass + stage2_total_mass
-    total_height = stage1_height + stage2_height
+    stage1_total_mass = 1.3*stage1_total_mass;
+    stage2_total_mass = 1.3*stage2_total_mass;
+    
+    total_height = stage1_height + stage2_height;
 
-% end
+end
 
+stage1_thrust_weight_ratio = 1.3;
+stage2_thrust_weight_ratio = 0.76;
+for i=1:range(10)
+    [stage1_total_mass, stage2_total_mass, total_height] = get_sub_system_mass("LH2", "LH2", .5, 1, i);
+    thrust
+end
