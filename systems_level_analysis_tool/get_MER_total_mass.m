@@ -78,7 +78,7 @@ function [num_engines_stage1, num_engines_stage2, total_mass] = get_MER_total_ma
     
     stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, 1, true);
     
-    num_engines_stage1 = stage2_total_mass*g0*T_to_W_second/stage2_thrust;
+    num_engines_stage1 = stage2_total_mass*g0*T_to_W_first/stage2_thrust;
     
     stage1_thrust_single = stage1_thrust;
     residual = realmax;
