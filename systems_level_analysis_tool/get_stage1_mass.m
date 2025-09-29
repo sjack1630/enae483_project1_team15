@@ -19,34 +19,34 @@ function stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total
         stage1_ratio = 3.6;
         stage1_oxidizer_rho = rho_LOX;
         stage1_fuel_rho = rho_LCH4;
-        stage1_thrust_single = 2.26e3; % N
+        stage1_thrust_single = 2.26e6; % N
         stage1_nozzle_exp = 34.34;
-        chamber_pressure_1 = 35.16e3; % Pa
+        chamber_pressure_1 = 35.16e6; % Pa
     elseif first_stage == "LH2"
         stage1_ratio = 6.03;
         stage1_oxidizer_rho = rho_LOX;
         stage1_fuel_rho = rho_LH2;
-        stage1_thrust_single = 1.86e3; % N
+        stage1_thrust_single = 1.86e6; % N
         stage1_nozzle_exp = 78;
-        chamber_pressure_1 = 20.64e3; % Pa
+        chamber_pressure_1 = 20.64e6; % Pa
     elseif first_stage == "RP1"
         stage1_ratio = 2.72;
         stage1_oxidizer_rho = rho_LOX;
         stage1_fuel_rho = rho_RP1;
-        stage1_thrust_single = 1.92e3; % N
+        stage1_thrust_single = 1.92e6; % N
         stage1_nozzle_exp = 37;
-        chamber_pressure_1 = 25.8e3; % Pa
+        chamber_pressure_1 = 25.8e6; % Pa
     elseif first_stage == "solid"
-        stage1_thrust_single = 4.5e3; % N
+        stage1_thrust_single = 4.5e6; % N
         stage1_nozzle_exp = 16;
-        chamber_pressure_1 = 10.5e3; % Pa
+        chamber_pressure_1 = 10.5e6; % Pa
     elseif first_stage == "storables"
         stage1_ratio = 2.67;
         stage1_oxidizer_rho = rho_N2O4;
         stage1_fuel_rho = rho_UDMH;
-        stage1_thrust_single = 1.75e3; % N
+        stage1_thrust_single = 1.75e6; % N
         stage1_nozzle_exp = 26.2;
-        chamber_pressure_1 = 15.7e3; % Pa
+        chamber_pressure_1 = 15.7e6; % Pa
     end
     
     if init
