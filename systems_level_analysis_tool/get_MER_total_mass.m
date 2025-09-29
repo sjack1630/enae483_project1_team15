@@ -88,7 +88,7 @@ function [num_engines_stage1, num_engines_stage2, total_mass] = get_MER_total_ma
         M_0 = stage1_total_mass;
         M_p = stage1_total_mass*(1-r); % kg
     
-        stage1_total_mass = get_stage1_mass(second_stage, M_p, M_0, stage2_total_mass, num_engines_stage1, false);
+        stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, num_engines_stage1, false);
         num_engines_stage1 = stage1_total_mass*g0*T_to_W_first/stage1_thrust_single;
         residual = abs(stage1_total_mass - M_0);
     end
