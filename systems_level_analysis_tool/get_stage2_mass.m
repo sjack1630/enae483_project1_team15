@@ -1,4 +1,4 @@
-function stage2_total_mass = get_stage2_mass(second_stage, M_p, M_0, num_engines, init)
+function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p, M_0, num_engines, init)
     
     rho_LH2 = 71;
     rho_LOX = 1140;
@@ -128,13 +128,26 @@ function stage2_total_mass = get_stage2_mass(second_stage, M_p, M_0, num_engines
         stage2_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
     end
     
-    % stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
+    stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
     
     stage2_mass_thrust_struct = 2.25e-4*stage2_thrust;
     
     stage2_mass_gimbals = 237.8*(stage2_thrust/chamber_pressure_2)^(0.9375);
     
-    % stage2_mass_avionics = 10*M_0^(0.361);
+    stage2_mass_avionics = 10*M_0^(0.361);
     
-    stage2_total_mass = M_p + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
+    stage2_total_mass = M_p + stage2_mass_wiring + stage2_mass_avionics + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
+
+    assignin('base', 'stage2_mass_wiring', stage2_mass_wiring);
+    assignin('base', 'stage2_mass_avionics', stage2_mass_avionics);
+    assignin('base', 'stage2_tank_mass', stage2_tank_mass);
+    assignin('base', 'stage2_insulation_mass', stage2_insulation_mass);
+    assignin('base', 'stage2_engine_mass', stage2_engine_mass);
+    assignin('base', 'stage2_mass_thrust_struct', stage2_mass_thrust_struct);
+    assignin('base', 'stage2_casing_mass', stage2_casing_mass);
+    assignin('base', 'stage2_mass_gimbals', stage2_mass_gimbals);
+    assignin('base', 'payload_fairing_mass', payload_fairing_mass);
+    assignin('base', 'stage2_intertank2_fairing_mass', stage2_intertank2_fairing_mass);
+    assignin('base', 'stage2_aft_fairing_mass', stage2_aft_fairing_mass);
+
 end

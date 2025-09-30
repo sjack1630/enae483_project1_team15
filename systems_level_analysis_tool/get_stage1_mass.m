@@ -1,4 +1,4 @@
-function stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, num_engines, init)
+function [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, num_engines, init)
     
     rho_LH2 = 71;
     rho_LOX = 1140;
@@ -127,13 +127,26 @@ function stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total
         stage1_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
     end
 
-    stage1_mass_wiring = 1.058*sqrt(M_0)*stage1_height^(0.25);
+    stage1_mass_wiring = 1.058*sqrt(M_0 - stage2_total_mass)*stage1_height^(0.25);
 
     stage1_mass_thrust_struct = 2.25e-4*stage1_thrust;
 
     stage1_mass_gimbals = 237.8*(stage1_thrust/chamber_pressure_1)^(0.9375);
 
-    stage1_mass_avionics = 10*M_0^(0.361);
+    stage1_mass_avionics = 10*(M_0 - stage2_total_mass)^(0.361);
 
     stage1_total_mass = M_p + stage1_tank_mass + stage1_insulation_mass + stage1_engine_mass + stage1_mass_thrust_struct + stage1_casing_mass + stage1_mass_gimbals + stage1_mass_avionics + stage1_mass_wiring + interstage_fairing_mass + stage1_intertank2_fairing_mass + stage1_aft2_fairing_mass + stage2_total_mass;
+
+    assignin('base', 'stage1_tank_mass', stage1_tank_mass);
+    assignin('base', 'stage1_insulation_mass', stage1_insulation_mass);
+    assignin('base', 'stage1_engine_mass', stage1_engine_mass);
+    assignin('base', 'stage1_mass_thrust_struct', stage1_mass_thrust_struct);
+    assignin('base', 'stage1_casing_mass', stage1_casing_mass);
+    assignin('base', 'stage1_mass_gimbals', stage1_mass_gimbals);
+    assignin('base', 'stage1_mass_avionics', stage1_mass_avionics);
+    assignin('base', 'stage1_mass_wiring', stage1_mass_wiring);
+    assignin('base', 'interstage_fairing_mass', interstage_fairing_mass);
+    assignin('base', 'stage1_intertank2_fairing_mass', stage1_intertank2_fairing_mass);
+    assignin('base', 'stage1_aft2_fairing_mass', stage1_aft2_fairing_mass);
+
 end

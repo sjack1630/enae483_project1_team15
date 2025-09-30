@@ -1,4 +1,4 @@
-function [num_engines_stage1, num_engines_stage2, total_mass] = get_MER_total_mass(first_stage, second_stage, X)
+function [num_engines_stage1, num_engines_stage2, total_mass, total_height, stage1_T_to_W, stage2_T_to_W] = get_MER_total_mass(first_stage, second_stage, X)
     addpath("..\vehicle_level_analysis_tool\")
     
     T_to_W_first = 1.3;
@@ -65,13 +65,13 @@ function [num_engines_stage1, num_engines_stage2, total_mass] = get_MER_total_ma
             M_0 = stage2_total_mass;
             M_p = stage2_total_mass*(1-r); % kg
         
-            stage2_total_mass = get_stage2_mass(second_stage, M_p, M_0, ceil(num_engines_stage2), false);
+            [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p, M_0, ceil(num_engines_stage2), false);
             num_engines_stage2 = stage2_total_mass*g0*T_to_W_second/stage2_thrust_single;
             residual = abs(stage2_total_mass - M_0);
         end   
     else
         num_engines_required = stage2_total_mass*g0*T_to_W_second/stage2_thrust_single;
-        stage2_total_mass = get_stage2_mass(second_stage, M_p, M_0, ceil(num_engines_required), false);
+        [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p, M_0, ceil(num_engines_required), false);
         num_engines_required_recompued = stage2_total_mass*g0*T_to_W_second/stage2_thrust_single;
         if ceil(num_engines_required) ~= ceil(num_engines_required_recompued)
             num_engines_stage2 = ceil(num_engines_required_recompued);
@@ -100,13 +100,13 @@ function [num_engines_stage1, num_engines_stage2, total_mass] = get_MER_total_ma
             M_0 = stage1_total_mass;
             M_p = stage1_total_mass*(1-r); % kg
         
-            stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, ceil(num_engines_stage1), false);
+            [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, ceil(num_engines_stage1), false);
             num_engines_stage1 = stage1_total_mass*g0*T_to_W_first/stage1_thrust_single;
             residual = abs(stage1_total_mass - M_0);
         end
     else
         num_engines_required = stage1_total_mass*g0*T_to_W_first/stage1_thrust_single;
-        stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, ceil(num_engines_required), false);
+        [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, ceil(num_engines_required), false);
         num_engines_required_recompued = stage1_total_mass*g0*T_to_W_first/stage1_thrust_single;
         if ceil(num_engines_required) ~= ceil(num_engines_required_recompued)
             num_engines_stage1 = ceil(num_engines_required_recompued);
@@ -118,6 +118,7 @@ function [num_engines_stage1, num_engines_stage2, total_mass] = get_MER_total_ma
     total_mass = (stage1_total_mass - M_l)*1.3 + M_l;
     num_engines_stage1 = ceil(num_engines_stage1);
     num_engines_stage2 = ceil(num_engines_stage2);
-    num_engines_stage2*stage2_thrust_single/g0/stage2_total_mass
-    num_engines_stage1*stage1_thrust_single/g0/stage1_total_mass
+    total_height = stage1_height + stage2_height;
+    stage2_T_to_W = num_engines_stage2*stage2_thrust_single/g0/stage2_total_mass;
+    stage1_T_to_W = num_engines_stage1*stage1_thrust_single/g0/stage1_total_mass;
 end
