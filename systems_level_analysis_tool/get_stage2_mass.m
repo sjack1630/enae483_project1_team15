@@ -9,7 +9,7 @@ function stage2_total_mass = get_stage2_mass(second_stage, M_p, M_0, num_engines
     rho_UDMH = 791;
     
     M_l = 26000; % kg
-    radius = 4; % m
+    radius = 6; % m
     cap_height = 1; % m
     payload_cone_height = 10; % m
     payload_cyl_height = 10; % m
@@ -96,11 +96,13 @@ function stage2_total_mass = get_stage2_mass(second_stage, M_p, M_0, num_engines
         else
             stage2_insulation_mass = LOX_stage2_insulation_mass;
         end
-    else
+    elseif second_stage == "solid"
         stage2_insulation_mass = 0;
         solid_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
         solid_cyl_vol = solid_volume - solid_cap_vol;
         solid_cyl_height = solid_cyl_vol/(pi*radius^2);
+    else
+        stage2_insulation_mass = 0;
     end
     
     if second_stage ~= "solid"
@@ -126,13 +128,13 @@ function stage2_total_mass = get_stage2_mass(second_stage, M_p, M_0, num_engines
         stage2_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
     end
     
-    stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
+    % stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
     
     stage2_mass_thrust_struct = 2.25e-4*stage2_thrust;
     
     stage2_mass_gimbals = 237.8*(stage2_thrust/chamber_pressure_2)^(0.9375);
     
-    stage2_mass_avionics = 10*M_0^(0.361);
+    % stage2_mass_avionics = 10*M_0^(0.361);
     
-    stage2_total_mass = M_p + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + stage2_mass_avionics + stage2_mass_wiring + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
+    stage2_total_mass = M_p + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
 end

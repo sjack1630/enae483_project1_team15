@@ -8,8 +8,7 @@ function stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total
     rho_N2O4 = 1442;
     rho_UDMH = 791;
     
-    M_l = 26000; % kg
-    radius = 4; % m
+    radius = 6; % m
     cap_height = 1; % m
     payload_cone_height = 10; % m
     payload_cyl_height = 10; % m
@@ -96,11 +95,13 @@ function stage1_total_mass = get_stage1_mass(first_stage, M_p, M_0, stage2_total
         else
             stage1_insulation_mass = LOX_stage1_insulation_mass;
         end
-    else
+    elseif first_stage == "solid"
         stage1_insulation_mass = 0;
         solid_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
         solid_cyl_vol = solid_volume - solid_cap_vol;
         solid_cyl_height = solid_cyl_vol/(pi*radius^2);
+    else
+        stage1_insulation_mass = 0;
     end
 
     if first_stage ~= "solid"
