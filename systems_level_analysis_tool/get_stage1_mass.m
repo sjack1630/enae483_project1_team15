@@ -8,7 +8,7 @@ function [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, 
     rho_N2O4 = 1442;
     rho_UDMH = 791;
     
-    radius = 6; % m
+    radius = 4; % m
     cap_height = 1; % m
     payload_cone_height = 10; % m
     payload_cyl_height = 10; % m
@@ -116,14 +116,14 @@ function [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, 
     aft2_fairing_area = 2*pi*radius*(engine_space + cap_height);
 
     interstage_fairing_mass = 4.95*interstage_fairing_area^(1.15);
-    stage1_aft2_fairing_mass = 4.95*aft2_fairing_area^(1.15);
+    stage1_aft_fairing_mass = 4.95*aft2_fairing_area^(1.15);
 
     if first_stage ~= "solid"    
         intertank2_fairing_area = 2*pi*radius*(2*cap_height);
-        stage1_intertank2_fairing_mass = 4.95*intertank2_fairing_area^(1.15);
+        stage1_intertank_fairing_mass = 4.95*intertank2_fairing_area^(1.15);
         stage1_height = payload_cone_height + payload_cyl_height + 4*cap_height + ox_cyl_height + fuel_cyl_height + engine_space;
     else 
-        stage1_intertank2_fairing_mass = 0;
+        stage1_intertank_fairing_mass = 0;
         stage1_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
     end
 
@@ -135,8 +135,9 @@ function [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, 
 
     stage1_mass_avionics = 10*(M_0 - stage2_total_mass)^(0.361);
 
-    stage1_total_mass = M_p + stage1_tank_mass + stage1_insulation_mass + stage1_engine_mass + stage1_mass_thrust_struct + stage1_casing_mass + stage1_mass_gimbals + stage1_mass_avionics + stage1_mass_wiring + interstage_fairing_mass + stage1_intertank2_fairing_mass + stage1_aft2_fairing_mass + stage2_total_mass;
-
+    stage1_total_mass = M_p + stage1_tank_mass + stage1_insulation_mass + stage1_engine_mass + stage1_mass_thrust_struct + stage1_casing_mass + stage1_mass_gimbals + stage1_mass_avionics + stage1_mass_wiring + interstage_fairing_mass + stage1_intertank_fairing_mass + stage1_aft_fairing_mass + stage2_total_mass;
+    
+    assignin('base', 'stage1_propellant_mass', M_p);
     assignin('base', 'stage1_tank_mass', stage1_tank_mass);
     assignin('base', 'stage1_insulation_mass', stage1_insulation_mass);
     assignin('base', 'stage1_engine_mass', stage1_engine_mass);
@@ -146,7 +147,7 @@ function [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, 
     assignin('base', 'stage1_mass_avionics', stage1_mass_avionics);
     assignin('base', 'stage1_mass_wiring', stage1_mass_wiring);
     assignin('base', 'interstage_fairing_mass', interstage_fairing_mass);
-    assignin('base', 'stage1_intertank2_fairing_mass', stage1_intertank2_fairing_mass);
-    assignin('base', 'stage1_aft2_fairing_mass', stage1_aft2_fairing_mass);
+    assignin('base', 'stage1_intertank_fairing_mass', stage1_intertank_fairing_mass);
+    assignin('base', 'stage1_aft_fairing_mass', stage1_aft_fairing_mass);
 
 end

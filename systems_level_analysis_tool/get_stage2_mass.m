@@ -9,7 +9,7 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
     rho_UDMH = 791;
     
     M_l = 26000; % kg
-    radius = 6; % m
+    radius = 4; % m
     cap_height = 1; % m
     payload_cone_height = 10; % m
     payload_cyl_height = 10; % m
@@ -138,6 +138,7 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
     
     stage2_total_mass = M_p + stage2_mass_wiring + stage2_mass_avionics + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
 
+    assignin('base', 'stage2_propellant_mass', M_p);
     assignin('base', 'stage2_mass_wiring', stage2_mass_wiring);
     assignin('base', 'stage2_mass_avionics', stage2_mass_avionics);
     assignin('base', 'stage2_tank_mass', stage2_tank_mass);
