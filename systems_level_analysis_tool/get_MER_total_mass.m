@@ -120,15 +120,18 @@ function [num_engines_stage1, num_engines_stage2, stage1_only_total_mass, stage2
             num_engines_stage1 = ceil(num_engines_required);
         end
     end
+
+    total_height = stage1_height + stage2_height;
+
+    mass_avionics = 10*stage1_total_mass^(0.361);
+
     
     stage1_only_total_mass = (stage1_total_mass - stage2_total_mass)*1.3;
-    stage2_only_total_mass = (stage2_total_mass - M_l)*1.3;
+    stage2_only_total_mass = (stage2_total_mass + mass_avionics - M_l)*1.3;
     total_mass = stage1_total_mass*1.3;
 
     num_engines_stage1 = ceil(num_engines_stage1);
     num_engines_stage2 = ceil(num_engines_stage2);
-
-    total_height = stage1_height + stage2_height;
 
     stage2_T_to_W = num_engines_stage2*stage2_thrust_single/g0/stage2_only_total_mass;
     stage1_T_to_W = num_engines_stage1*stage1_thrust_single/g0/stage1_only_total_mass;
