@@ -10,8 +10,10 @@ delta1 = 0.08;
 delta2 = 0.08;
 payload = 26000; %kg
 %Specific Impulse
+Isp_s2n = "LOX/LH2";
 Isp_s2 = 366; %stage 2 
 %LCH4, LH2, RP1, solids, storables
+Isp_n = ["LOX/CH4", "LOX/LH2", "LOX/RP1", "Solid", "Storables"];
 Isp = [327, 366, 311, 269, 285]; %stage 1 varies
 
 
@@ -51,11 +53,13 @@ for isp = 1:length(Isp)
     %plotting
     plot(X, cost_s1);
     hold on;
+    grid on;
     plot(X, cost_s2);
     plot(X, cost_tot);
     plot(x_min, min_gross_cost, '.', MarkerSize=20);
     ylim([0, 80]);
-    title(sprintf('Stage 1 Isp = %d s', Isp(isp)));
+    title("Cost of Stages vs. Delta V Fraction")
+    subtitle(sprintf('Stage 1 = %s, Stage 2 = %s', Isp_n(isp), Isp_s2n))
     legend("First Stage Cost", "Second Stage Cost", "Gross Vehicle Cost")
     xlabel("Delta V Fraction");
     ylabel("Cost ($B2025)")
