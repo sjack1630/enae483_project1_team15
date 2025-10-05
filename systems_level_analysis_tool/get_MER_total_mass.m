@@ -100,16 +100,16 @@ function [num_engines_stage1, num_engines_stage2, stage1_only_total_mass, stage2
     if first_stage ~= "solid"
         while residual > tol
         
-            M_0 = (stage1_total_mass - stage2_total_mass)*1.3 + stage2_total_mass;
+            M_0 = (stage1_total_mass - margin_stage2_total_mass)*1.3 + margin_stage2_total_mass;
             M_p = stage1_total_mass*(1-r); % kg
         
-            [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, ceil(num_engines_stage1), false);
-            margin_stage1_total_mass = (stage1_total_mass - stage2_total_mass)*1.3 + stage2_total_mass;
+            [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, M_0, margin_stage2_total_mass, ceil(num_engines_stage1), false);
+            margin_stage1_total_mass = (stage1_total_mass - margin_stage2_total_mass)*1.3 + margin_stage2_total_mass;
             num_engines_stage1 = margin_stage1_total_mass*g0*T_to_W_first/stage1_thrust_single;
             residual = abs(margin_stage1_total_mass - M_0);
         end
     else
-        margin_stage1_total_mass = (stage1_total_mass - stage2_total_mass)*1.3 + stage2_total_mass;
+        margin_stage1_total_mass = (stage1_total_mass - margin_stage2_total_mass)*1.3 + margin_stage2_total_mass;
         num_engines_required = margin_stage1_total_mass*g0*T_to_W_first/stage1_thrust_single;
         [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, ceil(num_engines_required), false);
         margin_stage1_total_mass = (stage1_total_mass - stage2_total_mass)*1.3 + stage2_total_mass;
@@ -127,12 +127,12 @@ function [num_engines_stage1, num_engines_stage2, stage1_only_total_mass, stage2
 
     assignin('base', 'mass_avionics', mass_avionics);
 
-    stage1_only_total_mass = (stage1_total_mass - stage2_total_mass)*1.3;
-    stage2_only_total_mass = (stage2_total_mass + mass_avionics - M_l)*1.3;
+    stage1_only_total_mass = margin_stage1_total_mass - margin_stage2_total_mass - M_l + mass_avionics;
+    stage2_only_total_mass = margin_stage2_total_mass - M_l + mass_avionics;
     
-    stage1_total_mass = (stage1_total_mass - stage2_total_mass)*1.3 + stage2_total_mass + mass_avionics*1.3;
-    stage2_total_mass = (stage2_total_mass + mass_avionics - M_l)*1.3 + M_l;
-    total_mass = (mass_avionics + stage1_total_mass)*1.3;
+    stage1_total_mass = margin_stage1_total_mass + mass_avionics;
+    stage2_total_mass = margin_stage2_total_mass + mass_avionics;
+    total_mass = stage1_total_mass;
 
     num_engines_stage1 = ceil(num_engines_stage1);
     num_engines_stage2 = ceil(num_engines_stage2);
