@@ -9,7 +9,7 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
     rho_UDMH = 791;
     
     M_l = 26000; % kg
-    radius = 8.3; % m
+    radius = 4; % m
     cap_height = 1; % m
     payload_cone_height = 10; % m
     payload_cyl_height = 10; % m
