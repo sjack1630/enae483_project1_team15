@@ -127,8 +127,8 @@ function [num_engines_stage1, num_engines_stage2, stage1_only_total_mass, stage2
 
     assignin('base', 'mass_avionics', mass_avionics);
     
-    stage1_only_total_mass = (stage1_total_mass - stage2_total_mass)*1.3;
-    stage2_only_total_mass = (stage2_total_mass + mass_avionics - M_l)*1.3;
+    stage1_only_total_mass = (stage1_total_mass - stage2_total_mass)*1.3 + stage2_total_mass + mass_avionics*1.3;
+    stage2_only_total_mass = (stage2_total_mass + mass_avionics - M_l)*1.3 + M_l;
     total_mass = (mass_avionics + stage1_total_mass)*1.3;
 
     num_engines_stage1 = ceil(num_engines_stage1);
