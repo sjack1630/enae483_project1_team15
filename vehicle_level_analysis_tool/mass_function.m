@@ -19,7 +19,7 @@ function [m_in1, m_in2, m_pr1, m_pr2, m0] = mass_function(Isp1, Isp2, X, delta1,
 
     % If (1 - R1*delta1) or (1 - R2*delta2) is less than 0, then the design
     % is structurally impossible based on the definitions
-    % for m_2 and m_1 that follow, return NaN for all outputs
+    % for m_2 and m_1 that follow, return NaN for all outputs4.73E+06
     if (1 - R1*delta1) <= 0 || (1 - R2*delta2) <= 0
         m_in1 = NaN; m_in2 = NaN; m_pr1 = NaN; m_pr2 = NaN; m0 = NaN;
         return

@@ -1,5 +1,6 @@
 function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p, M_0, num_engines, init)
     
+    % Set density constants
     rho_LH2 = 71;
     rho_LOX = 1140;
     rho_RP1 = 820;
@@ -8,6 +9,7 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
     rho_N2O4 = 1442;
     rho_UDMH = 791;
     
+    % Set tank constants
     M_l = 26000; % kg
     radius = 6.4; % m
     cap_height = 1; % m
@@ -15,6 +17,7 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
     payload_cyl_height = 10; % m
     engine_space = 3; % m
     
+    % Constants that depend on propellant choice
     if second_stage == "LCH4"
         stage2_ratio = 3.6;
         stage2_oxidizer_rho = rho_LOX;
@@ -49,12 +52,14 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
         chamber_pressure_2 = 14.7e6; % Pa
     end
     
+    % Set thrust according to number of engines
     if init
         stage2_thrust = stage2_thrust_single;
     else
         stage2_thrust = stage2_thrust_single*num_engines;
     end
 
+    % Compute stage2 tank mass
     if second_stage == "solid"
         solid_volume = M_p/rho_solid;
         stage2_tank_mass = 12.16*solid_volume;
@@ -71,6 +76,8 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
         end
     end
     
+    % Compute stage2 tank volume assuming cylinder and two sphere caps 1m
+    % tall each
     if second_stage ~= "solid"
         ox_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
         ox_cyl_vol = volume_oxidizer - ox_cap_vol;
@@ -85,6 +92,8 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
         fuel_cyl_surf_area = 2*pi*radius*fuel_cyl_height;
     end
     
+    % Compute insulation from tank volume, edge cases for storables and
+    % solids
     if second_stage ~= "solid" && second_stage ~= "storables"
         LOX_stage2_insulation_mass = 1.123*(ox_cap_surf_area + ox_cyl_surf_area);
         if second_stage == "LH2"
@@ -105,6 +114,7 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
         stage2_insulation_mass = 0;
     end
     
+    % Set engine and casing mass, dependent on propellant
     if second_stage ~= "solid"
         stage2_engine_mass = 7.81e-4*stage2_thrust + 3.37e-5*stage2_thrust*sqrt(stage2_nozzle_exp) + 59;
         stage2_casing_mass = 0;
@@ -113,12 +123,14 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
         stage2_casing_mass = 0.135*M_p;
     end
     
+    % Compute payload and aft fairing areas
     payload_fairing_area = pi*radius*sqrt(radius^2 + payload_cone_height^2) + 2*pi*radius*payload_cyl_height;
     aft2_fairing_area = 2*pi*radius*(engine_space + cap_height);
     
     payload_fairing_mass = 4.95*payload_fairing_area^(1.15);
     stage2_aft_fairing_mass = 4.95*aft2_fairing_area^(1.15);
     
+    % Compute intertank fairing mass and overall height dependent on propellant
     if second_stage ~= "solid"    
         intertank2_fairing_area = 2*pi*radius*(2*cap_height);
         stage2_intertank2_fairing_mass = 4.95*intertank2_fairing_area^(1.15);
@@ -128,14 +140,17 @@ function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p,
         stage2_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
     end
 
+    % Compute wiring, thrust structure, and gimbals masses
     stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
         
     stage2_mass_thrust_struct = 2.25e-4*stage2_thrust;
     
     stage2_mass_gimbals = 237.8*(stage2_thrust/chamber_pressure_2)^(0.9375);
     
+    % Compute total mass
     stage2_total_mass = M_p + stage2_mass_wiring + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
 
+    % Assign workspace variables
     assignin('base', 'stage2_propellant_mass', M_p);
     assignin('base', 'stage2_tank_mass', stage2_tank_mass);
     assignin('base', 'stage2_mass_wiring', stage2_mass_wiring);
