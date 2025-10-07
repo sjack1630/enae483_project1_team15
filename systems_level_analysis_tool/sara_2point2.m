@@ -1,7 +1,7 @@
 
 first_stage = "LH2"
 second_stage = "LH2" 
-X = 0.5;
+X = 0.54;
 
 [num_engines_stage1, num_engines_stage2, stage1_only_total_mass, stage2_only_total_mass, total_mass, total_height, stage1_T_to_W, stage2_T_to_W] = get_MER_total_mass(first_stage, second_stage, X)
 
