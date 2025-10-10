@@ -1,4 +1,5 @@
 function [num_engines_stage1, num_engines_stage2, stage1_only_total_mass, stage2_only_total_mass, total_mass, total_height, stage1_T_to_W, stage2_T_to_W] = get_MER_total_mass(first_stage, second_stage, X)
+    % Sophie, Spyros, Chris
     addpath("..\vehicle_level_analysis_tool\")
     
     % Set thrust to weight constants

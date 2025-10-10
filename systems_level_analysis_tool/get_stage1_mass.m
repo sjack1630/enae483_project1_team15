@@ -1,4 +1,5 @@
 function [stage1_total_mass, stage1_height] = get_stage1_mass(first_stage, M_p, M_0, stage2_total_mass, num_engines, init)
+    % Sophie, Sara, Ben
     
     % Set density constants
     rho_LH2 = 71;

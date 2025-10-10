@@ -1,0 +1,431 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>get_stage2_mass</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2025-10-07">
+<meta name="DC.source" content="get_stage2_mass.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<pre class="codeinput">
+<span class="keyword">function</span> [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p, M_0, num_engines, init)
+    <span class="comment">% Sophie, Sara, Ben</span>
+
+    <span class="comment">% Set density constants</span>
+    rho_LH2 = 71;
+    rho_LOX = 1140;
+    rho_RP1 = 820;
+    rho_LCH4 = 423;
+    rho_solid = 1680;
+    rho_N2O4 = 1442;
+    rho_UDMH = 791;
+
+    <span class="comment">% Set tank constants</span>
+    M_l = 26000; <span class="comment">% kg</span>
+    radius = 6.4; <span class="comment">% m</span>
+    cap_height = 1; <span class="comment">% m</span>
+    payload_cone_height = 10; <span class="comment">% m</span>
+    payload_cyl_height = 10; <span class="comment">% m</span>
+    engine_space = 3; <span class="comment">% m</span>
+
+    <span class="comment">% Constants that depend on propellant choice</span>
+    <span class="keyword">if</span> second_stage == <span class="string">"LCH4"</span>
+        stage2_ratio = 3.6;
+        stage2_oxidizer_rho = rho_LOX;
+        stage2_fuel_rho = rho_LCH4;
+        stage2_thrust_single = 0.745e6; <span class="comment">% N</span>
+        stage2_nozzle_exp = 45;
+        chamber_pressure_2 = 10.1e6; <span class="comment">% Pa</span>
+    <span class="keyword">elseif</span> second_stage == <span class="string">"LH2"</span>
+        stage2_ratio = 6.03;
+        stage2_oxidizer_rho = rho_LOX;
+        stage2_fuel_rho = rho_LH2;
+        stage2_thrust_single = 0.099e6; <span class="comment">% N</span>
+        stage2_nozzle_exp = 84;
+        chamber_pressure_2 = 4.2e6; <span class="comment">% Pa</span>
+    <span class="keyword">elseif</span> second_stage == <span class="string">"RP1"</span>
+        stage2_ratio = 2.72;
+        stage2_oxidizer_rho = rho_LOX;
+        stage2_fuel_rho = rho_RP1;
+        stage2_thrust_single = 0.061e6; <span class="comment">% N</span>
+        stage2_nozzle_exp = 14.5;
+        chamber_pressure_2 = 6.77e6; <span class="comment">% Pa</span>
+    <span class="keyword">elseif</span> second_stage == <span class="string">"solid"</span>
+        stage2_thrust_single = 2.94e6; <span class="comment">% N</span>
+        stage2_nozzle_exp = 56;
+        chamber_pressure_2 = 5e6; <span class="comment">% Pa</span>
+    <span class="keyword">elseif</span> second_stage == <span class="string">"storables"</span>
+        stage2_ratio = 2.67;
+        stage2_oxidizer_rho = rho_N2O4;
+        stage2_fuel_rho = rho_UDMH;
+        stage2_thrust_single = 0.067e6; <span class="comment">% N</span>
+        stage2_nozzle_exp = 81.3;
+        chamber_pressure_2 = 14.7e6; <span class="comment">% Pa</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% Set thrust according to number of engines</span>
+    <span class="keyword">if</span> init
+        stage2_thrust = stage2_thrust_single;
+    <span class="keyword">else</span>
+        stage2_thrust = stage2_thrust_single*num_engines;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Compute stage2 tank mass</span>
+    <span class="keyword">if</span> second_stage == <span class="string">"solid"</span>
+        solid_volume = M_p/rho_solid;
+        stage2_tank_mass = 12.16*solid_volume;
+    <span class="keyword">else</span>
+        mass_split = M_p/(stage2_ratio+1);
+        mass_oxidizer = stage2_ratio*mass_split;
+        mass_fuel = mass_split;
+        volume_oxidizer = mass_oxidizer/stage2_oxidizer_rho;
+        volume_fuel = mass_fuel/stage2_fuel_rho;
+        <span class="keyword">if</span> second_stage == <span class="string">"LH2"</span>
+            stage2_tank_mass = 12.16*volume_oxidizer + 9.09*volume_fuel;
+        <span class="keyword">else</span>
+            stage2_tank_mass = 12.16*(volume_oxidizer + volume_fuel);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% Compute stage2 tank volume assuming cylinder and two sphere caps 1m</span>
+    <span class="comment">% tall each</span>
+    <span class="keyword">if</span> second_stage ~= <span class="string">"solid"</span>
+        ox_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
+        ox_cyl_vol = volume_oxidizer - ox_cap_vol;
+        ox_cyl_height = ox_cyl_vol/(pi*radius^2);
+        ox_cap_surf_area = 2*(pi*(radius^2 + cap_height^2));
+        ox_cyl_surf_area = 2*pi*radius*ox_cyl_height;
+
+        fuel_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
+        fuel_cyl_vol = volume_fuel - fuel_cap_vol;
+        fuel_cyl_height = fuel_cyl_vol/(pi*radius^2);
+        fuel_cap_surf_area = 2*(pi*(radius^2 + cap_height^2));
+        fuel_cyl_surf_area = 2*pi*radius*fuel_cyl_height;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Compute insulation from tank volume, edge cases for storables and</span>
+    <span class="comment">% solids</span>
+    <span class="keyword">if</span> second_stage ~= <span class="string">"solid"</span> &amp;&amp; second_stage ~= <span class="string">"storables"</span>
+        LOX_stage2_insulation_mass = 1.123*(ox_cap_surf_area + ox_cyl_surf_area);
+        <span class="keyword">if</span> second_stage == <span class="string">"LH2"</span>
+            LH2_stage2_insulation_mass = 2.88*(fuel_cap_surf_area + fuel_cyl_surf_area);
+            stage2_insulation_mass = LOX_stage2_insulation_mass + LH2_stage2_insulation_mass;
+        <span class="keyword">elseif</span> second_stage == <span class="string">"LCH4"</span>
+            LCH4_stage2_insulation_mass = 1.123*(fuel_cap_surf_area + fuel_cyl_surf_area);
+            stage2_insulation_mass = LOX_stage2_insulation_mass + LCH4_stage2_insulation_mass;
+        <span class="keyword">else</span>
+            stage2_insulation_mass = LOX_stage2_insulation_mass;
+        <span class="keyword">end</span>
+    <span class="keyword">elseif</span> second_stage == <span class="string">"solid"</span>
+        stage2_insulation_mass = 0;
+        solid_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
+        solid_cyl_vol = solid_volume - solid_cap_vol;
+        solid_cyl_height = solid_cyl_vol/(pi*radius^2);
+    <span class="keyword">else</span>
+        stage2_insulation_mass = 0;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Set engine and casing mass, dependent on propellant</span>
+    <span class="keyword">if</span> second_stage ~= <span class="string">"solid"</span>
+        stage2_engine_mass = 7.81e-4*stage2_thrust + 3.37e-5*stage2_thrust*sqrt(stage2_nozzle_exp) + 59;
+        stage2_casing_mass = 0;
+    <span class="keyword">else</span>
+        stage2_engine_mass = 0;
+        stage2_casing_mass = 0.135*M_p;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Compute payload and aft fairing areas</span>
+    payload_fairing_area = pi*radius*sqrt(radius^2 + payload_cone_height^2) + 2*pi*radius*payload_cyl_height;
+    aft2_fairing_area = 2*pi*radius*(engine_space + cap_height);
+
+    payload_fairing_mass = 4.95*payload_fairing_area^(1.15);
+    stage2_aft_fairing_mass = 4.95*aft2_fairing_area^(1.15);
+
+    <span class="comment">% Compute intertank fairing mass and overall height dependent on propellant</span>
+    <span class="keyword">if</span> second_stage ~= <span class="string">"solid"</span>
+        intertank2_fairing_area = 2*pi*radius*(2*cap_height);
+        stage2_intertank2_fairing_mass = 4.95*intertank2_fairing_area^(1.15);
+        stage2_height = payload_cone_height + payload_cyl_height + 4*cap_height + ox_cyl_height + fuel_cyl_height + engine_space;
+    <span class="keyword">else</span>
+        stage2_intertank2_fairing_mass = 0;
+        stage2_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Compute wiring, thrust structure, and gimbals masses</span>
+    stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
+
+    stage2_mass_thrust_struct = 2.25e-4*stage2_thrust;
+
+    stage2_mass_gimbals = 237.8*(stage2_thrust/chamber_pressure_2)^(0.9375);
+
+    <span class="comment">% Compute total mass</span>
+    stage2_total_mass = M_p + stage2_mass_wiring + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
+
+    <span class="comment">% Assign workspace variables</span>
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_propellant_mass'</span>, M_p);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_tank_mass'</span>, stage2_tank_mass);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_mass_wiring'</span>, stage2_mass_wiring);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_insulation_mass'</span>, stage2_insulation_mass);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_engine_mass'</span>, stage2_engine_mass);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_mass_thrust_struct'</span>, stage2_mass_thrust_struct);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_casing_mass'</span>, stage2_casing_mass);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_mass_gimbals'</span>, stage2_mass_gimbals);
+    assignin(<span class="string">'base'</span>, <span class="string">'payload_fairing_mass'</span>, payload_fairing_mass);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_intertank2_fairing_mass'</span>, stage2_intertank2_fairing_mass);
+    assignin(<span class="string">'base'</span>, <span class="string">'stage2_aft_fairing_mass'</span>, stage2_aft_fairing_mass);
+
+<span class="keyword">end</span>
+</pre>
+<pre class="codeoutput error">Not enough input arguments.
+
+Error in get_stage2_mass (line 22)
+    if second_stage == "LCH4"
+       ^^^^^^^^^^^^</pre>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+function [stage2_total_mass, stage2_height] = get_stage2_mass(second_stage, M_p, M_0, num_engines, init)
+    % Sophie, Sara, Ben
+    
+    % Set density constants
+    rho_LH2 = 71;
+    rho_LOX = 1140;
+    rho_RP1 = 820;
+    rho_LCH4 = 423;
+    rho_solid = 1680;
+    rho_N2O4 = 1442;
+    rho_UDMH = 791;
+    
+    % Set tank constants
+    M_l = 26000; % kg
+    radius = 6.4; % m
+    cap_height = 1; % m
+    payload_cone_height = 10; % m
+    payload_cyl_height = 10; % m
+    engine_space = 3; % m
+    
+    % Constants that depend on propellant choice
+    if second_stage == "LCH4"
+        stage2_ratio = 3.6;
+        stage2_oxidizer_rho = rho_LOX;
+        stage2_fuel_rho = rho_LCH4;
+        stage2_thrust_single = 0.745e6; % N
+        stage2_nozzle_exp = 45;
+        chamber_pressure_2 = 10.1e6; % Pa
+    elseif second_stage == "LH2"
+        stage2_ratio = 6.03;
+        stage2_oxidizer_rho = rho_LOX;
+        stage2_fuel_rho = rho_LH2;
+        stage2_thrust_single = 0.099e6; % N
+        stage2_nozzle_exp = 84;
+        chamber_pressure_2 = 4.2e6; % Pa
+    elseif second_stage == "RP1"
+        stage2_ratio = 2.72;
+        stage2_oxidizer_rho = rho_LOX;
+        stage2_fuel_rho = rho_RP1;
+        stage2_thrust_single = 0.061e6; % N
+        stage2_nozzle_exp = 14.5;
+        chamber_pressure_2 = 6.77e6; % Pa
+    elseif second_stage == "solid"
+        stage2_thrust_single = 2.94e6; % N
+        stage2_nozzle_exp = 56;
+        chamber_pressure_2 = 5e6; % Pa
+    elseif second_stage == "storables"
+        stage2_ratio = 2.67;
+        stage2_oxidizer_rho = rho_N2O4;
+        stage2_fuel_rho = rho_UDMH;
+        stage2_thrust_single = 0.067e6; % N
+        stage2_nozzle_exp = 81.3;
+        chamber_pressure_2 = 14.7e6; % Pa
+    end
+    
+    % Set thrust according to number of engines
+    if init
+        stage2_thrust = stage2_thrust_single;
+    else
+        stage2_thrust = stage2_thrust_single*num_engines;
+    end
+
+    % Compute stage2 tank mass
+    if second_stage == "solid"
+        solid_volume = M_p/rho_solid;
+        stage2_tank_mass = 12.16*solid_volume;
+    else
+        mass_split = M_p/(stage2_ratio+1);
+        mass_oxidizer = stage2_ratio*mass_split;
+        mass_fuel = mass_split;
+        volume_oxidizer = mass_oxidizer/stage2_oxidizer_rho;
+        volume_fuel = mass_fuel/stage2_fuel_rho;
+        if second_stage == "LH2"
+            stage2_tank_mass = 12.16*volume_oxidizer + 9.09*volume_fuel;
+        else
+            stage2_tank_mass = 12.16*(volume_oxidizer + volume_fuel);
+        end
+    end
+    
+    % Compute stage2 tank volume assuming cylinder and two sphere caps 1m
+    % tall each
+    if second_stage ~= "solid"
+        ox_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
+        ox_cyl_vol = volume_oxidizer - ox_cap_vol;
+        ox_cyl_height = ox_cyl_vol/(pi*radius^2);
+        ox_cap_surf_area = 2*(pi*(radius^2 + cap_height^2));
+        ox_cyl_surf_area = 2*pi*radius*ox_cyl_height;
+    
+        fuel_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
+        fuel_cyl_vol = volume_fuel - fuel_cap_vol;
+        fuel_cyl_height = fuel_cyl_vol/(pi*radius^2);
+        fuel_cap_surf_area = 2*(pi*(radius^2 + cap_height^2));
+        fuel_cyl_surf_area = 2*pi*radius*fuel_cyl_height;
+    end
+    
+    % Compute insulation from tank volume, edge cases for storables and
+    % solids
+    if second_stage ~= "solid" && second_stage ~= "storables"
+        LOX_stage2_insulation_mass = 1.123*(ox_cap_surf_area + ox_cyl_surf_area);
+        if second_stage == "LH2"
+            LH2_stage2_insulation_mass = 2.88*(fuel_cap_surf_area + fuel_cyl_surf_area);
+            stage2_insulation_mass = LOX_stage2_insulation_mass + LH2_stage2_insulation_mass;
+        elseif second_stage == "LCH4"
+            LCH4_stage2_insulation_mass = 1.123*(fuel_cap_surf_area + fuel_cyl_surf_area);
+            stage2_insulation_mass = LOX_stage2_insulation_mass + LCH4_stage2_insulation_mass;
+        else
+            stage2_insulation_mass = LOX_stage2_insulation_mass;
+        end
+    elseif second_stage == "solid"
+        stage2_insulation_mass = 0;
+        solid_cap_vol = 2*(pi*cap_height)*(3*radius^2 + cap_height^2)/6;
+        solid_cyl_vol = solid_volume - solid_cap_vol;
+        solid_cyl_height = solid_cyl_vol/(pi*radius^2);
+    else
+        stage2_insulation_mass = 0;
+    end
+    
+    % Set engine and casing mass, dependent on propellant
+    if second_stage ~= "solid"
+        stage2_engine_mass = 7.81e-4*stage2_thrust + 3.37e-5*stage2_thrust*sqrt(stage2_nozzle_exp) + 59;
+        stage2_casing_mass = 0;
+    else
+        stage2_engine_mass = 0;
+        stage2_casing_mass = 0.135*M_p;
+    end
+    
+    % Compute payload and aft fairing areas
+    payload_fairing_area = pi*radius*sqrt(radius^2 + payload_cone_height^2) + 2*pi*radius*payload_cyl_height;
+    aft2_fairing_area = 2*pi*radius*(engine_space + cap_height);
+    
+    payload_fairing_mass = 4.95*payload_fairing_area^(1.15);
+    stage2_aft_fairing_mass = 4.95*aft2_fairing_area^(1.15);
+    
+    % Compute intertank fairing mass and overall height dependent on propellant
+    if second_stage ~= "solid"    
+        intertank2_fairing_area = 2*pi*radius*(2*cap_height);
+        stage2_intertank2_fairing_mass = 4.95*intertank2_fairing_area^(1.15);
+        stage2_height = payload_cone_height + payload_cyl_height + 4*cap_height + ox_cyl_height + fuel_cyl_height + engine_space;
+    else 
+        stage2_intertank2_fairing_mass = 0;
+        stage2_height = payload_cone_height + payload_cyl_height + 2*cap_height + solid_cyl_height + engine_space;
+    end
+
+    % Compute wiring, thrust structure, and gimbals masses
+    stage2_mass_wiring = 1.058*sqrt(M_0)*stage2_height^(0.25);
+        
+    stage2_mass_thrust_struct = 2.25e-4*stage2_thrust;
+    
+    stage2_mass_gimbals = 237.8*(stage2_thrust/chamber_pressure_2)^(0.9375);
+    
+    % Compute total mass
+    stage2_total_mass = M_p + stage2_mass_wiring + stage2_tank_mass + stage2_insulation_mass + stage2_engine_mass + stage2_mass_thrust_struct + stage2_casing_mass + stage2_mass_gimbals + payload_fairing_mass + stage2_intertank2_fairing_mass + stage2_aft_fairing_mass + M_l;
+
+    % Assign workspace variables
+    assignin('base', 'stage2_propellant_mass', M_p);
+    assignin('base', 'stage2_tank_mass', stage2_tank_mass);
+    assignin('base', 'stage2_mass_wiring', stage2_mass_wiring);
+    assignin('base', 'stage2_insulation_mass', stage2_insulation_mass);
+    assignin('base', 'stage2_engine_mass', stage2_engine_mass);
+    assignin('base', 'stage2_mass_thrust_struct', stage2_mass_thrust_struct);
+    assignin('base', 'stage2_casing_mass', stage2_casing_mass);
+    assignin('base', 'stage2_mass_gimbals', stage2_mass_gimbals);
+    assignin('base', 'payload_fairing_mass', payload_fairing_mass);
+    assignin('base', 'stage2_intertank2_fairing_mass', stage2_intertank2_fairing_mass);
+    assignin('base', 'stage2_aft_fairing_mass', stage2_aft_fairing_mass);
+
+end
+##### SOURCE END #####
+-->
+</body>
+</html>
